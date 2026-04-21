@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API Backend para proyecto fullstack como examen de la materia BDA",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RegisCT03/-corte3-bda-243723.git"
+  },
+  "author": "Regina CT",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RegisCT03/-corte3-bda-243723/issues"
+  },
+  "homepage": "https://github.com/RegisCT03/-corte3-bda-243723#readme"
+}
