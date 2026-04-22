@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { getClientForRole } = require('../db');
+const { getClientForRole, ROLE_CREDENTIALS } = require('../db');
 const authMiddleware = require('../middleware/auth');
 
 router.use(authMiddleware);
@@ -9,37 +9,32 @@ router.get('/', async (req, res) => {
   let client;
   try {
     client = await getClientForRole(req.roleKey);
-
     await client.query('BEGIN');
 
-    const { ROLE_CREDENTIALS } = require('../db');
     const creds = ROLE_CREDENTIALS[req.roleKey];
-    if (creds.vet_id !== null) {
-      await client.query('SET LOCAL app.current_vet_id = $1', [String(creds.vet_id)]);
+    if (creds && creds.vet_id !== null) {
+      await client.query("SELECT set_config('app.current_vet_id', $1, true)", [String(creds.vet_id)]);
     }
 
     const nombre = req.query.nombre || '';
-
     let sql;
-    let params;
+    let params = [];
 
     if (nombre.trim()) {
-      sql    = `SELECT m.id, m.nombre, m.especie, m.fecha_nacimiento, d.nombre AS dueno_nombre, d.telefono
-                FROM mascotas m
-                JOIN duenos d ON d.id = m.dueno_id
-                WHERE m.nombre ILIKE $1`;
+      sql = `SELECT m.id, m.nombre, m.especie, m.fecha_nacimiento, d.nombre AS dueno_nombre, d.telefono
+             FROM mascotas m
+             JOIN duenos d ON d.id = m.dueno_id
+             WHERE m.nombre ILIKE $1`;
       params = [`%${nombre}%`];
     } else {
-      sql    = `SELECT m.id, m.nombre, m.especie, m.fecha_nacimiento, d.nombre AS dueno_nombre, d.telefono
-                FROM mascotas m
-                JOIN duenos d ON d.id = m.dueno_id
-                ORDER BY m.nombre`;
-      params = [];
+      sql = `SELECT m.id, m.nombre, m.especie, m.fecha_nacimiento, d.nombre AS dueno_nombre, d.telefono
+             FROM mascotas m
+             JOIN duenos d ON d.id = m.dueno_id
+             ORDER BY m.nombre`;
     }
 
     const result = await client.query(sql, params);
     await client.query('COMMIT');
-
     res.json({ data: result.rows, total: result.rowCount });
   } catch (err) {
     if (client) await client.query('ROLLBACK').catch(() => {});
@@ -59,10 +54,9 @@ router.get('/:id', async (req, res) => {
     client = await getClientForRole(req.roleKey);
     await client.query('BEGIN');
 
-    const { ROLE_CREDENTIALS } = require('../db');
     const creds = ROLE_CREDENTIALS[req.roleKey];
-    if (creds.vet_id !== null) {
-      await client.query('SET LOCAL app.current_vet_id = $1', [String(creds.vet_id)]);
+    if (creds && creds.vet_id !== null) {
+      await client.query("SELECT set_config('app.current_vet_id', $1, true)", [String(creds.vet_id)]);
     }
 
     const result = await client.query(
@@ -74,7 +68,6 @@ router.get('/:id', async (req, res) => {
     );
 
     await client.query('COMMIT');
-
     if (result.rowCount === 0) return res.status(404).json({ error: 'No encontrada o sin acceso' });
     res.json({ data: result.rows[0] });
   } catch (err) {

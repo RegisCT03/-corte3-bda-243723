@@ -33,7 +33,7 @@ async function getClientForRole(roleKey) {
   const client = await pool.connect();
 
   if (creds.vet_id !== null) {
-    await client.query('SET LOCAL app.current_vet_id = $1', [String(creds.vet_id)]);
+    await client.query("SELECT set_config('app.current_vet_id', $1, true)", [String(creds.vet_id)]);
   } return client;
 }
 module.exports = { getClientForRole, ROLE_CREDENTIALS };

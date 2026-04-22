@@ -9,7 +9,7 @@ async function beginTx(client, roleKey) {
   await client.query('BEGIN');
   const creds = ROLE_CREDENTIALS[roleKey];
   if (creds.vet_id !== null) {
-    await client.query('SET LOCAL app.current_vet_id = $1', [String(creds.vet_id)]);
+    await client.query("SELECT set_config('app.current_vet_id', $1, true)", [String(creds.vet_id)]);
   }
 }
 
