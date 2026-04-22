@@ -18,6 +18,7 @@ app.use((req, _res, next) => {
 
 app.use('/api/mascotas', mascotasRouter);
 app.use('/api/citas', citasRouter);
+app.use('/api/vacunas', vacunasRouter);
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
 app.listen(PORT, () => {
