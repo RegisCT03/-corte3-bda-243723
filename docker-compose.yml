@@ -8,13 +8,8 @@ services:
     env_file:
       - .env
     volumes:
+      - ./backend:/docker-entrypoint-initdb.d
       - pg_data:/var/lib/postgresql/data
-      - ./schema_corte3.sql:/docker-entrypoint-initdb.d/00_schema.sql
-      - ./backend/01_procedures.sql:/docker-entrypoint-initdb.d/01_procedures.sql
-      - ./backend/02_triggers.sql:/docker-entrypoint-initdb.d/02_triggers.sql
-      - ./backend/03_views.sql:/docker-entrypoint-initdb.d/03_views.sql
-      - ./backend/04_roles_y_permisos.sql:/docker-entrypoint-initdb.d/04_roles_y_permisos.sql
-      - ./backend/05_rls.sql:/docker-entrypoint-initdb.d/05_rls.sql
     ports:
       - "5432:5432"
     healthcheck:
