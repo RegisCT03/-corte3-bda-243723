@@ -143,8 +143,7 @@ CREATE POLICY pol_mascotas_vet ON mascotas
 ## Sección 3 — Demostración de caché Redis
 
 ### Demostración
-
-<video controls src="20260423-0203-02.9329410.mp4" title="Redis"></video>
+https://drive.google.com/file/d/1o-iXBtwMIVtx-NjpR9EpRMaJUVsFQxLo/view?usp=sharing 
 
 - En el intervalo de 0:01 - 0:05, el sistema muestra CACHE MISS. La latencia es de 130ms porque la API tuvo que consultar la base de datos PostgreSQL.
 
