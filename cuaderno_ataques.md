@@ -27,10 +27,8 @@ Lo cual retornaría todas las filas de la tabla sin importar el rol, saltando RL
 **Resultado real:**  
 El sistema retorna 0 resultados (o solo los asignados al veterinario). El string `' OR '1'='1` se busca literalmente como nombre de mascota.
 
-**Log del servidor:**
-```
-[2026-04-22T10:15:03.421Z] GET /API/mascotas role=vet_lopez
-```
+**Respuesta:**
+![alt text](image-3.png)
 Sin errores ni filas inesperadas. La query ejecutada en BD fue:
 ```sql
 SELECT ... WHERE m.nombre ILIKE $1   -- $1 = "%' OR '1'='1%"
@@ -65,10 +63,8 @@ El segundo statement borraría la tabla entera.
 **Resultado real:**  
 El sistema retorna 0 resultados. La tabla `mascotas` sigue intacta. El driver `pg` de Node.js no soporta múltiples statements en una sola llamada a `client.query()` por defecto — envía el string al servidor como un único statement parametrizado. El `;` y el `DROP` llegan como parte del valor `$1`, no como SQL separado.
 
-**Log del servidor:**
-```
-[2026-04-22T10:16:44.102Z] GET /API/mascotas?nombre=%27%3B+DROP+TABLE+mascotas%3B+-- role=vet_lopez
-```
+**Respuesta:**
+![alt text](image-4.png)
 La tabla sigue existiendo tras el ataque.
 
 **Línea exacta de defensa:**  
@@ -97,11 +93,8 @@ Esto inyectaría las cédulas de los veterinarios en los resultados.
 **Resultado real:**  
 0 resultados. El string completo se busca como nombre de mascota. No hay ningún `UNION` en el SQL ejecutado; el input llegó a PostgreSQL como el string literal `%' UNION SELECT...%` comparado contra la columna `nombre`.
 
-**Log del servidor:**
-```
-[2026-04-22T10:18:12.881Z] GET /API/mascotas?nombre='+UNION+SELECT... role=vet_lopez
-[BD] 0 filas retornadas
-```
+**Resultado:**
+![alt text](image-5.png)
 
 **Línea exacta de defensa:**  
 `API/src/routes/mascotas.js` — **línea 55**  
