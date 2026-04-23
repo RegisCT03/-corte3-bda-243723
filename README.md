@@ -1,4 +1,4 @@
-# Cuaderno de Ataques — Corte 3
+# README — Corte 3
 
 **Sistema:** Clínica Veterinaria VetSecure  
 **Stack:** PostgreSQL 16 · Redis 7 · Node.js (Express) · Next.js  
