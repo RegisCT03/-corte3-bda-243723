@@ -32,7 +32,7 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./API
       dockerfile: Dockerfile
     container_name: clinica_api
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./Frontend
       dockerfile: Dockerfile
     container_name: clinica_frontend
     restart: unless-stopped

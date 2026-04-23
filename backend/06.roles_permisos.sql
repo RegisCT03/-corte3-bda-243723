@@ -46,7 +46,7 @@ GRANT EXECUTE ON PROCEDURE sp_agendar_cita(INT, INT, TIMESTAMP, TEXT) TO veterin
 
 GRANT USAGE ON SCHEMA public TO recepcion;
 GRANT SELECT ON mascotas TO recepcion;
-GRANT SELECT ON duenos   TO recepcion;
+GRANT SELECT ON duenos TO recepcion;
 GRANT SELECT, INSERT ON citas TO recepcion;
 GRANT USAGE, SELECT ON SEQUENCE citas_id_seq TO recepcion;
 GRANT SELECT ON veterinarios TO recepcion;
@@ -58,3 +58,6 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO admin;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO admin;
 GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO admin;
 GRANT EXECUTE ON ALL ROUTINES IN SCHEMA public TO admin;
+
+GRANT INSERT ON historial_movimientos TO veterinario, recepcion;
+GRANT USAGE, SELECT ON SEQUENCE historial_movimientos_id_seq TO veterinario, recepcion;
